@@ -96,7 +96,12 @@ class Annex60(object):
         lines = list()
         for _, lin in enumerate(f_sou):
             for ori, new in rep.items():
-                lin = string.replace(lin, ori, new)
+                try:
+                    lin = string.replace(lin, ori, new)
+                except UnicodeDecodeError as e:
+                    print('Unicode decoding error in file:  \n  Removing non-ascii characters!')
+                    lin = "".join(i for i in lin if ord(i)<128)
+                    lin = string.replace(lin, ori, new)
             lines.append(lin)
         f_sou.close
         # Write the lines to the new file

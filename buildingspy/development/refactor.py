@@ -480,6 +480,9 @@ def _get_package_list_for_file(directory, file_name):
         fil = open(os.path.join(directory, file_name), 'r')
         typ=__MOD
         for _ in range(2):
+            import sys
+            reload(sys)  # Reload does the trick!
+            sys.setdefaultencoding('UTF8')
             if recordString in fil.readline():
                 typ = __REC
                 break;

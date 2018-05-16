@@ -82,7 +82,9 @@ class Plotter(object):
                 tNew.append(t[i])
                 yNew.append(y[i])
             else:
-                if t[i] != t[i - 1] and t[i - 1] + tInc < maxT:
+                if t[i] == t[i - 1]:
+                  yNew[-1]=y[i]
+                elif t[i - 1] + tInc < maxT:
                     if t[i - 1] + tInc < t[i + 1]:
                         tNew.append(t[i - 1] + tInc)
                         yNew.append(y[i])

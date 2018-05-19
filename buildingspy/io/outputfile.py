@@ -70,6 +70,9 @@ def get_model_statistics(log_file, simulator):
         NUMJAC = "Number of numerical Jacobians"
         TRAABO = "Translation aborted"
         initalizationMode = False
+        
+        print "log lines:\n"
+        print lines
 
         ret['translated'] = True
         for lin in lines:

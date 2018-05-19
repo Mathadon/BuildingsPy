@@ -1277,7 +1277,6 @@ len(yNew)    = %d.""" % (filNam, varNam, len(tGriOld), len(tGriNew), len(yNew))
                             if foundError:
                                 self._reporter.writeWarning("%s: Translation statistics for %s and results changed for %s.\n Old = %s\n New = %s"
                                                             % (mat_file_name, stage, key, old_res['statistics-%s' % stage][key], y_tra[stage][key]))
-                                print("source file is: " + y_tra)
                             else:
                                 self._reporter.writeWarning("%s: Translation statistics for %s changed for %s, but results are unchanged.\n Old = %s\n New = %s"
                                                             % (mat_file_name, stage, key, old_res['statistics-%s' % stage][key], y_tra[stage][key]))
@@ -1286,6 +1285,8 @@ len(yNew)    = %d.""" % (filNam, varNam, len(tGriOld), len(tGriNew), len(yNew))
                     else:
                         self._reporter.writeWarning("%s: Found translation statistics for %s for %s in old but not in new results.\n Old = %s"
                                                     % (mat_file_name, stage, key, old_res['statistics-%s' % stage][key]))
+                        print("source file is: \n")
+                        print(y_tra)
                         r = True
             else:
                 # The new results have no such statistics.

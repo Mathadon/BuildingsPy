@@ -1277,6 +1277,7 @@ len(yNew)    = %d.""" % (filNam, varNam, len(tGriOld), len(tGriNew), len(yNew))
                             if foundError:
                                 self._reporter.writeWarning("%s: Translation statistics for %s and results changed for %s.\n Old = %s\n New = %s"
                                                             % (mat_file_name, stage, key, old_res['statistics-%s' % stage][key], y_tra[stage][key]))
+                                print("source file is: " + y_tra)
                             else:
                                 self._reporter.writeWarning("%s: Translation statistics for %s changed for %s, but results are unchanged.\n Old = %s\n New = %s"
                                                             % (mat_file_name, stage, key, old_res['statistics-%s' % stage][key], y_tra[stage][key]))

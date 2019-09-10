@@ -254,6 +254,7 @@ class IBPSA(object):
 
 
     def deleteOldFiles(self, copiedFiles, previouslyCopiedFiles):
+        import os
         # Delete the files that were previously merged, but are no longer in IBPSA.
         # First, remove from the list the files that were copied just now
         for fil in copiedFiles:

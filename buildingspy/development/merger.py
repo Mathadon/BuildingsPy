@@ -500,37 +500,43 @@ class IBPSA(object):
                     with open(desFil) as f:
                         code = f.read()
 
-                    template = """{0}  
-extends {1}_internal({2});\n
-model {1}_internal\n
-{3}
-end {1}_internal;
-{4}
-{5}"""
-
-
+                    # Extract relevant parts from the source code
                     parts = re.search(r"(within .*?;\n\s*model (.*?)\n)(.*\n)(\s*end .*?;)",code, re.DOTALL).groups()
                     header = parts[0]
                     modelName = opts["name"].split(".")[-1]
                     body = parts[2]
                     footer = parts[3]
                     if modelName != parts[1]:
-                        print("model names do not match! {} and {}".format(modelName, parts[1]))
+                        raise ValueError("Consistency check failed. Model names do not match. {} and {} are not equal.".format(modelName, parts[1]))
 
                     
+                    # Set a default annotation and try to extract the annotation from
+                    # the source body.
                     annotation="annotation();"
                     parts = re.search(r"(.*;\s*\n)(\s*annotation\s*\(.*?\)\s*;\s*\n)\s*$", body, re.DOTALL).groups()
                     if not parts == None:
                         body=parts[0]
                         annotation=parts[1]
+                    # Indent and remove annotation from body
                     body = body.replace("\n", "\n  ").replace(annotation,"")
 
+
+                    # Code for overriding parameter defaults in extends statement
                     parameters=""
                     for k,v in opts["parameters"].items():
                         parameters = parameters + k + " = " + v + ","
                     parameters = parameters[:-1] # drop the last comma
-                    newCode=template.format(header, modelName, parameters, body, annotation, footer)
 
+                    # Generate the new code using a template
+                    newCode="""{0}  
+extends {1}_internal({2});\n
+model {1}_internal\n
+{3}
+end {1}_internal;
+{4}
+{5}""".format(header, modelName, parameters, body, annotation, footer)
+
+                    # Write the new code
                     with open(desFil, "w") as f:
                         f.write(newCode)
 

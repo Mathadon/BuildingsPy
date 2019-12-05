@@ -585,7 +585,9 @@ end {1}_internal;
             for fil in sorted(copiedFiles):
                 fp.write(self._new_library_name + fil.split(self._target_home)[1] + "\n")
 
-        print("""\nThe merge has been succesfully prepared. The following steps still have to be completed:
+        print("""\nThe merge has been succesfully prepared. 
+We assume that the git staging area was clean before starting the process, 
+otherwise watch out what you commit. The following steps still have to be completed:
 1) Commit the updated files that have been copied using:
 > git commit -a -m \"Merged files from the library {0}\"
 2) Run the merge script again, which updates {2}, upon which the merge process continues. To abort, checkout all files.""".format(self._src_library_name, self._copFilPat, os.path.basename(self._copFilPat)))
@@ -602,7 +604,9 @@ end {1}_internal;
 3) Reapply earlier modifications using the patch file:
 > git apply --3way merge.patch
 4) Resolve conflicts if required, then also commit the patch, without amending:
-> git commit -a -m \"Applied patch for merge script\"""".format(sha, os.path.basename(self._copFilPat)))
+> git commit -a -m \"Applied patch for merge script\"
+5) Remove the patch file if desired.
+> rm merge.patch""".format(sha, os.path.basename(self._copFilPat)))
 
 
 

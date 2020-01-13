@@ -491,10 +491,12 @@ class IBPSA(object):
 
         previouslyCopiedFiles = self.getPreviouslyCopiedFiles()
 
+        
+
 
         # Build list of files to copy, and store them in filesToCopy
         filesToCopy = {}
-        fileNamesToPatch = []
+        
 
         for k,v in files.items():
             path = os.path.join(self._ibpsa_home, os.sep.join(k.split(".")[1:])+".mo")
@@ -504,7 +506,6 @@ class IBPSA(object):
                 print("Could not find file {}.".format(path))
             else:
                 filesToCopy[path]={"name": k, "parameters": v}
-                fileNamesToPatch.append(pathDest)
 
                 packagePath=self._ibpsa_home
                 packageName=self._src_library_name
@@ -512,6 +513,11 @@ class IBPSA(object):
                     packagePath=os.path.join(packagePath,subPackage)
                     packageName=packagePath+"."+subPackage
                     filesToCopy[os.path.join(packagePath, "package.mo")] = {"name": packageName, "parameters": {}}
+
+        # don't patch whole file list since the files may not exist yet
+        fileNamesToPatch = []
+        for file in previouslyCopiedFiles:
+            fileNamesToPatch.append(os.path.join(self._target_home, "../", file))
 
         cmd = "git format-patch {} --stdout -- {} > merge.patch".format(sha, " ".join(fileNamesToPatch))
         os.system(cmd)
@@ -588,7 +594,7 @@ end {1}_internal;
         print("""\nThe merge has been succesfully prepared. 
 We assume that the git staging area was clean before starting the process, 
 otherwise watch out what you commit. The following steps still have to be completed:
-1) Commit the updated files that have been copied using:
+1) Git add and then commit the updated files that have been copied using:
 > git commit -a -m \"Merged files from the library {0}\"
 2) Run the merge script again, which updates {2}, upon which the merge process continues. To abort, checkout all files.""".format(self._src_library_name, self._copFilPat, os.path.basename(self._copFilPat)))
         # os.remove("merge.patch")
